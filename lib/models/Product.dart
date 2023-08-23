@@ -39,7 +39,7 @@ List<Product> demoProducts = [
       "assets/images/Mox.jpg",
     ],
     title: "Mox 500",
-    price: 50,
+    price: 10,
     description:
         'Mox 500mg Capsule is used in the treatment of Bacterial infections.',
     rating: 4.1,
@@ -51,7 +51,7 @@ List<Product> demoProducts = [
       "assets/images/Gelusil.jpg",
     ],
     title: "Gelusil",
-    price: 30,
+    price: 10,
     description:
         'This medication is used to treat the symptoms of too much stomach acid such as stomach upset, heartburn, and acid indigestion.',
     rating: 4.1,
