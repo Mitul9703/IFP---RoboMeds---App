@@ -60,6 +60,18 @@ class CartCard extends StatelessWidget {
             //     ],
             //   ),
             // ),
+            TextButton(
+              onPressed: () {
+                controller.removeProduct(product);
+              },
+              child: Text(
+                "Remove",
+                style:
+                    TextStyle(fontWeight: FontWeight.w100, color: Colors.red),
+              ),
+              style: TextButton.styleFrom(
+                  side: BorderSide(width: 0.3, color: Colors.red)),
+            )
           ],
         ),
       ],

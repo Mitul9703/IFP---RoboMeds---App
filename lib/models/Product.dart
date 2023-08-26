@@ -6,6 +6,9 @@ class Product {
   final List<String> images;
   final double rating, price;
   final bool isFavourite, isPopular;
+  TimeOfDay? mornTime;
+  TimeOfDay? afternoonTime;
+  TimeOfDay? nightTime;
 
   Product({
     required this.id,
@@ -16,6 +19,9 @@ class Product {
     required this.title,
     required this.price,
     required this.description,
+    this.mornTime,
+    this.afternoonTime,
+    this.nightTime,
   });
 }
 

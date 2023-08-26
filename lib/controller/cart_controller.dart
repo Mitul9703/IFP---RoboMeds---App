@@ -14,17 +14,18 @@ class CartController extends GetxController {
 
   void addProduct(Product product) {
     if (_products.containsKey(product)) {
-      _products[product] += 1;
+      Get.snackbar('${product.title} can\'t be added', 'Item already in Queue',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(milliseconds: 800));
     } else {
       _products[product] = 1;
+      Get.snackbar(
+        '${product.title} Added',
+        'You have added the ${product.title} to the Queue',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(milliseconds: 800),
+      );
     }
-
-    Get.snackbar(
-      'Medicine Added',
-      'You have added the ${product.title} to the Queue',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: Duration(milliseconds: 800),
-    );
   }
 
   void removeProduct(Product product) {
@@ -35,31 +36,46 @@ class CartController extends GetxController {
     }
   }
 
-  Future<void> createCart(ProductModel productModel) async {
-    await _db
-        .collection('products')
-        .doc('${DateTime.now()}')
-        .set(productModel.toJson())
-        .whenComplete(
-          () => Get.snackbar('Success', 'Activated Queue',
-              snackPosition: SnackPosition.BOTTOM,
-              duration: Duration(milliseconds: 1000)),
-        );
+  Future<void> createCart() async {
+    Map<String, Map<String, String?>> productsMap = {};
+
+    for (var k in _products.keys) {
+      productsMap[k.title] = {
+        'MorningTime': k.mornTime.toString(),
+        'AfternoonTime': k.afternoonTime.toString(),
+        'NightTime': k.nightTime.toString(),
+      };
+    }
+
+    await _db.collection('products').doc('${DateTime.now()}').set({
+      'Products': productsMap,
+    }).whenComplete(
+      () => Get.snackbar('Success', 'Activated Queue',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(milliseconds: 1000)),
+    );
 
     // await _db.collection('products').add(productModel.toJson()).whenComplete(
     //     () => Get.snackbar('Success', 'Added',
     //         snackPosition: SnackPosition.BOTTOM,
     //         duration: Duration(seconds: 1)));
   }
+  // getPM() {
+  //   List myList = [];
+  //   var ProductWithTime;
 
-  getPM() {
-    List myList = [];
-
-    for (var k in _products.keys) {
-      myList.add(k.title);
-    }
-    return ProductModel(listofproducts: myList);
-  }
+  //   for (var k in _products.keys) {
+  //     // ProductWithTime = {
+  //     //   "Product": k.title,
+  //     //   "MorningTime": k.mornTime,
+  //     //   "AfternoonTime": k.afternoonTime,
+  //     //   "NightTime": k.nightTime
+  //     // };
+  //     // mylist.add(ProductWithTime);
+  //     myList.add(k.title);
+  //   }
+  //   // return ProductModel(listofproducts: myList);
+  // }
 
   get products => _products;
 
@@ -91,12 +107,35 @@ class CartController extends GetxController {
   //     .toString();
 }
 
+// class ProductModel {
+//   final List listofproducts;
+
+//   const ProductModel({required this.listofproducts});
+
+//   toJson() {
+//     return {'Products': listofproducts};
+//   }
+// }
+
 class ProductModel {
-  final List listofproducts;
+  final String product;
+  final String? morningTime;
+  final String? afternoonTime;
+  final String? nightTime;
 
-  const ProductModel({required this.listofproducts});
+  ProductModel({
+    required this.product,
+    this.morningTime,
+    this.afternoonTime,
+    this.nightTime,
+  });
 
-  toJson() {
-    return {'Products': listofproducts};
+  Map<String, dynamic> toJson() {
+    return {
+      'product': product,
+      'morningTime': morningTime,
+      'afternoonTime': afternoonTime,
+      'nightTime': nightTime,
+    };
   }
 }
